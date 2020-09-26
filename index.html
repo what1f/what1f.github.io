@@ -21,7 +21,7 @@
     <link rel="alternative" href="/atom.xml" title="Closer." type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="icon" href="/img/logo.ico">
   
   <link rel="stylesheet" type="text/css" href="/./main.0cf68a.css">
   <style type="text/css">
@@ -67,25 +67,11 @@
     			<a q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
     			
             
-    			
-    			<a q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
-    			
-            
-    			
-    			<a q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
-    			
-            
 		</nav>
 		<nav class="header-nav">
 			<div class="social">
 				
-					<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
-		        
-					<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
-		        
 					<a class="rss" target="_blank" href="#" title="rss"><i class="icon-rss"></i></a>
-		        
-					<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
 		        
 			</div>
 		</nav>
@@ -120,13 +106,7 @@
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
-			        
-						<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
-			        
 						<a class="rss" target="_blank" href="#" title="rss"><i class="icon-rss"></i></a>
-			        
-						<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
 			        
 				</div>
 			</nav>
@@ -153,6 +133,64 @@
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-Jotang" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="CTF"><a href="#CTF" class="headerlink" title="CTF"></a>CTF</h1><h3 id="1-签到题："><a href="#1-签到题：" class="headerlink" title="1.签到题："></a>1.签到题：</h3><p>有眼睛就行</p>
+<h3 id="2-NothingHere"><a href="#2-NothingHere" class="headerlink" title="2.NothingHere:"></a>2.NothingHere:</h3><p>查看源代码即可发现flag</p>
+<h3 id="3-Easysql"><a href="#3-Easysql" class="headerlink" title="3.Easysql:"></a>3.Easysql:</h3><p>很明显，这是一道sql注入的题，构造’1’ order by 2,和’1’ union select 1,2得到字段长度和回显位置，构造’1’union select1,database() 查到数据库名字为easysql，构造’1’union select 1,table_name from information_schema.tables where table_schema=’easysql’ 查出表名为flaghere，最后盲猜flag字段，构造’1’union select 1,flag from flaghere得到flag</p>
+<h3 id="4-GET-amp-POST"><a href="#4-GET-amp-POST" class="headerlink" title="4.GET&amp;POST:"></a>4.GET&amp;POST:</h3><p>isset()函数检查变量有没有被设置，用hackbar同时以get和post方式给a和b随便提交一个值进去即可获得flag</p>
+<h3 id="5-SheIsAlwaysTheBEST"><a href="#5-SheIsAlwaysTheBEST" class="headerlink" title="5.SheIsAlwaysTheBEST:"></a>5.SheIsAlwaysTheBEST:</h3><p>0exxxxxx形式的数值会被当成科学计数法，结果都为0，“==”判定为真，所以只要找两个md5值都为oe开头的即可，因为a要求为纯字母，b要求为数字，最终输入的值为a=QNKCDZO&amp;b=240610708。最后要解决的是变量c，首先变量c是一个对象，其中还包含了key这一变量，并且这个k的值还要满足 key == $flag。显然，flag是一条字符串，而”==”只比较数值，字符串会被当成0来处理，所以我们只要给c这个对象的key设置为0即可，即用post传入c={“key”:0}即可获得flag</p>
+<h3 id="6-IP-amp-Referer"><a href="#6-IP-amp-Referer" class="headerlink" title="6.IP&amp;Referer:"></a>6.IP&amp;Referer:</h3><p>改一下http头即可：</p>
+<p>X-Forwarded-For:1.1.1.1</p>
+<p>Referer:<a target="_blank" rel="noopener" href="http://www.doyouhaveagirlfriend.com/">www.doyouhaveagirlfriend.com</a></p>
+<h3 id="8-EasyUPLOAD"><a href="#8-EasyUPLOAD" class="headerlink" title="8.EasyUPLOAD:"></a>8.EasyUPLOAD:</h3><p>显然，这是一道文件上传的题。上传含一句话木马的php文件，发现有文件类型检测。用burp suite抓包改文件类型为image/jpeg后成功绕过，但发现还有文件内容检测，几次上传尝试后，发现是对&lt;?php这一敏感词有限制，修改一句话木马为&lt;?=eval($_POST[‘cmd’]);后成功绕过检测，上传成功，用蚁剑连上后成功找到flag。</p>
+<h1 id="算法："><a href="#算法：" class="headerlink" title="算法："></a>算法：</h1><h3 id="题一："><a href="#题一：" class="headerlink" title="题一："></a>题一：</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> brige[<span class="number">3</span>][<span class="number">100</span>];<span class="comment">//brige[0][i] == h;brige[1][i] == start;brige[2][i] == end</span></span><br><span class="line">    <span class="keyword">int</span> n,num=<span class="number">0</span>,x[<span class="number">1000</span>] = &#123;<span class="number">0</span>&#125;;<span class="comment">//x用来记录当前坐标已建桥的高度</span></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d&quot;</span>,&amp;brige[<span class="number">0</span>][i],&amp;brige[<span class="number">1</span>][i],&amp;brige[<span class="number">2</span>][i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j&lt;n;j++)</span><br><span class="line">    &#123;</span><br><span class="line">        num += brige[<span class="number">2</span>][j] - brige[<span class="number">1</span>][j]-(brige[<span class="number">0</span>][j] != <span class="number">0</span>)&amp;&amp;brige[<span class="number">1</span>][j] != brige[<span class="number">2</span>][j];<span class="comment">//高度为0或始末位置相同的情况不需要减1</span></span><br><span class="line">        <span class="keyword">if</span>(brige[<span class="number">1</span>][j] == brige[<span class="number">2</span>][j])<span class="comment">//始末位置一致只用一遍材料</span></span><br><span class="line">        &#123;</span><br><span class="line">            num += brige[<span class="number">0</span>][j];</span><br><span class="line">            x[brige[<span class="number">1</span>][j]] = brige[<span class="number">0</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">        <span class="keyword">if</span>(brige[<span class="number">0</span>][j] &gt; x[brige[<span class="number">1</span>][j]])</span><br><span class="line">        &#123;</span><br><span class="line">            num += brige[<span class="number">0</span>][j] - x[brige[<span class="number">1</span>][j]];</span><br><span class="line">            x[brige[<span class="number">1</span>][j]] = brige[<span class="number">0</span>][j];</span><br><span class="line">        &#125;         </span><br><span class="line">        <span class="keyword">if</span>(brige[<span class="number">0</span>][j] &gt; x[brige[<span class="number">2</span>][j]])</span><br><span class="line">        &#123;</span><br><span class="line">            num += brige[<span class="number">0</span>][j] - x[brige[<span class="number">2</span>][j]];</span><br><span class="line">            x[brige[<span class="number">2</span>][j]] = brige[<span class="number">0</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;      </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,num);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/09/26/Jotang/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-焦糖题目" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -277,29 +315,13 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
       
       
     
-      
-      
-      
-    
-      
-      
-      
-    
     
 
     <ul style="width: 70%">
     
     
       
-      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
-      
-        
-      
-      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'friends')"><a href="javascript:void(0)" q-class="active:friends">友链</a></li>
-      
-        
-      
-      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
+      <li style="width: 100%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
       
         
     </ul>
@@ -363,45 +385,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
 
     
-    	<section class="tools-section tools-section-friends" q-show="friends">
-  		
-        <ul class="search-ul">
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接2</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接3</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接4</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接5</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接6</a>
-            </li>
-          
-        </ul>
-  		
-    	</section>
-    
 
-    
-    	<section class="tools-section tools-section-me" q-show="aboutme">
-  	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
-  	  	
-    	</section>
     
   </div>
   
