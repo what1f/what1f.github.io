@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Closer.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Closer.">
+<meta property="og:url" content="https://what1f.github.io/index.html">
+<meta property="og:site_name" content="Closer.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Closer">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Closer." type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Closer.</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://what1f.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Jotang" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/26/Jotang/" class="article-date">
+  <time datetime="2020-09-26T08:11:15.986Z" itemprop="datePublished">2020-09-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="CTF"><a href="#CTF" class="headerlink" title="CTF"></a>CTF</h1><h3 id="1-签到题："><a href="#1-签到题：" class="headerlink" title="1.签到题："></a>1.签到题：</h3><p>有眼睛就行</p>
+<h3 id="2-NothingHere"><a href="#2-NothingHere" class="headerlink" title="2.NothingHere:"></a>2.NothingHere:</h3><p>查看源代码即可发现flag</p>
+<h3 id="3-Easysql"><a href="#3-Easysql" class="headerlink" title="3.Easysql:"></a>3.Easysql:</h3><p>很明显，这是一道sql注入的题，构造’1’ order by 2,和’1’ union select 1,2得到字段长度和回显位置，构造’1’union select1,database() 查到数据库名字为easysql，构造’1’union select 1,table_name from information_schema.tables where table_schema=’easysql’ 查出表名为flaghere，最后盲猜flag字段，构造’1’union select 1,flag from flaghere得到flag</p>
+<h3 id="4-GET-amp-POST"><a href="#4-GET-amp-POST" class="headerlink" title="4.GET&amp;POST:"></a>4.GET&amp;POST:</h3><p>isset()函数检查变量有没有被设置，用hackbar同时以get和post方式给a和b随便提交一个值进去即可获得flag</p>
+<h3 id="5-SheIsAlwaysTheBEST"><a href="#5-SheIsAlwaysTheBEST" class="headerlink" title="5.SheIsAlwaysTheBEST:"></a>5.SheIsAlwaysTheBEST:</h3><p>0exxxxxx形式的数值会被当成科学计数法，结果都为0，“==”判定为真，所以只要找两个md5值都为oe开头的即可，因为a要求为纯字母，b要求为数字，最终输入的值为a=QNKCDZO&amp;b=240610708。最后要解决的是变量c，首先变量c是一个对象，其中还包含了key这一变量，并且这个k的值还要满足 key == $flag。显然，flag是一条字符串，而”==”只比较数值，字符串会被当成0来处理，所以我们只要给c这个对象的key设置为0即可，即用post传入c={“key”:0}即可获得flag</p>
+<h3 id="6-IP-amp-Referer"><a href="#6-IP-amp-Referer" class="headerlink" title="6.IP&amp;Referer:"></a>6.IP&amp;Referer:</h3><p>改一下http头即可：</p>
+<p>X-Forwarded-For:1.1.1.1</p>
+<p>Referer:<a target="_blank" rel="noopener" href="http://www.doyouhaveagirlfriend.com/">www.doyouhaveagirlfriend.com</a></p>
+<h3 id="8-EasyUPLOAD"><a href="#8-EasyUPLOAD" class="headerlink" title="8.EasyUPLOAD:"></a>8.EasyUPLOAD:</h3><p>显然，这是一道文件上传的题。上传含一句话木马的php文件，发现有文件类型检测。用burp suite抓包改文件类型为image/jpeg后成功绕过，但发现还有文件内容检测，几次上传尝试后，发现是对&lt;?php这一敏感词有限制，修改一句话木马为&lt;?=eval($_POST[‘cmd’]);后成功绕过检测，上传成功，用蚁剑连上后成功找到flag。</p>
+<h1 id="算法："><a href="#算法：" class="headerlink" title="算法："></a>算法：</h1><h3 id="题一："><a href="#题一：" class="headerlink" title="题一："></a>题一：</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> brige[<span class="number">3</span>][<span class="number">100</span>];<span class="comment">//brige[0][i] == h;brige[1][i] == start;brige[2][i] == end</span></span><br><span class="line">    <span class="keyword">int</span> n,num=<span class="number">0</span>,x[<span class="number">1000</span>] = &#123;<span class="number">0</span>&#125;;<span class="comment">//x用来记录当前坐标已建桥的高度</span></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d&quot;</span>,&amp;brige[<span class="number">0</span>][i],&amp;brige[<span class="number">1</span>][i],&amp;brige[<span class="number">2</span>][i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j&lt;n;j++)</span><br><span class="line">    &#123;</span><br><span class="line">        num += brige[<span class="number">2</span>][j] - brige[<span class="number">1</span>][j]-(brige[<span class="number">0</span>][j] != <span class="number">0</span>)&amp;&amp;brige[<span class="number">1</span>][j] != brige[<span class="number">2</span>][j];<span class="comment">//高度为0或始末位置相同的情况不需要减1</span></span><br><span class="line">        <span class="keyword">if</span>(brige[<span class="number">1</span>][j] == brige[<span class="number">2</span>][j])<span class="comment">//始末位置一致只用一遍材料</span></span><br><span class="line">        &#123;</span><br><span class="line">            num += brige[<span class="number">0</span>][j];</span><br><span class="line">            x[brige[<span class="number">1</span>][j]] = brige[<span class="number">0</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">        <span class="keyword">if</span>(brige[<span class="number">0</span>][j] &gt; x[brige[<span class="number">1</span>][j]])</span><br><span class="line">        &#123;</span><br><span class="line">            num += brige[<span class="number">0</span>][j] - x[brige[<span class="number">1</span>][j]];</span><br><span class="line">            x[brige[<span class="number">1</span>][j]] = brige[<span class="number">0</span>][j];</span><br><span class="line">        &#125;         </span><br><span class="line">        <span class="keyword">if</span>(brige[<span class="number">0</span>][j] &gt; x[brige[<span class="number">2</span>][j]])</span><br><span class="line">        &#123;</span><br><span class="line">            num += brige[<span class="number">0</span>][j] - x[brige[<span class="number">2</span>][j]];</span><br><span class="line">            x[brige[<span class="number">2</span>][j]] = brige[<span class="number">0</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;      </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,num);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://what1f.github.io/2020/09/26/Jotang/" data-id="ckfjeb0p90001e4uidptdgj4z" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-测试博客" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/26/%E6%B5%8B%E8%AF%95%E5%8D%9A%E5%AE%A2/" class="article-date">
+  <time datetime="2020-09-26T08:07:37.000Z" itemprop="datePublished">2020-09-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/09/26/%E6%B5%8B%E8%AF%95%E5%8D%9A%E5%AE%A2/">测试博客</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://what1f.github.io/2020/09/26/%E6%B5%8B%E8%AF%95%E5%8D%9A%E5%AE%A2/" data-id="ckfjeb0pd0002e4uiepvu042n" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/09/26/Jotang/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/26/%E6%B5%8B%E8%AF%95%E5%8D%9A%E5%AE%A2/">测试博客</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Closer<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
