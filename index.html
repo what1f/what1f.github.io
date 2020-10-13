@@ -137,36 +137,47 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-焦糖题目" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-焦糖#7" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/26/%E7%84%A6%E7%B3%96%E9%A2%98%E7%9B%AE/">焦糖题目</a>
+      <a class="article-title" href="/2020/10/12/%E7%84%A6%E7%B3%96#7/">焦糖python题目</a>
     </h1>
   
 
         
-        <a href="/2020/09/26/%E7%84%A6%E7%B3%96%E9%A2%98%E7%9B%AE/" class="archive-article-date">
-  	<time datetime="2020-09-26T09:01:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-26</time>
+        <a href="/2020/10/12/%E7%84%A6%E7%B3%96#7/" class="archive-article-date">
+  	<time datetime="2020-10-12T09:01:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-10-12</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>Github:   <a target="_blank" rel="noopener" href="https://github.com/what1f/">https://github.com/what1f/</a></p>
-</blockquote>
-<blockquote>
-<p>博客：     <a href="https://what1f.github.io/">https://what1f.github.io/</a></p>
-</blockquote>
-<p>焦糖工作室招新题的做题记录</p>
-        
-          <a class="article-more-a" href="/2020/09/26/%E7%84%A6%E7%B3%96%E9%A2%98%E7%9B%AE/#more">Read more >></a>
-        
+        <h1 id="7-Python"><a href="#7-Python" class="headerlink" title="#7 Python"></a>#7 Python</h1><h2 id="2-信息门户自动登录"><a href="#2-信息门户自动登录" class="headerlink" title="2.信息门户自动登录"></a>2.信息门户自动登录</h2><p>大致思路：通过查找拼图缺口底边的白色长直线来定位缺的那一块拼图的位置。然后用selenium来模拟输入账号密码以及点击登录和滑动滑块完成拼图。</p>
+<!--Read more-->
+
+<p>走过的坑：</p>
+<ul>
+<li>最开始是尝试左上角的那条小直线，由于太短，图片里极有可能存在类似的线条。后改为底边的长直线，注意到，这条底边不仅长，且为白色，还有这条直线上方必定偏暗，这几个条件的限制大大提高了精确率。</li>
+<li>get_pic函数中，最开始使用的find_element_by_id来定位账号密码以及登录按钮有时正常，有时会出问题，我也不知道原因，后改用find_element_by_xpath来定位元素。</li>
+<li>登录滑动验证那里所给的图是缩放后的，爬下来的图长为590像素，而实际使用的长为280像素，所以在得出应滑动距离后应等比缩小，即乘280/590</li>
+<li>在模拟滑动的函数中使用move_by_offse函数时在循环中，每次循环都要调用一次ActionChains(browser)来刷新，不然偏移量会叠加，例如我本来想每次移动的距离分别为1 2 3 4，若整个循环只调用了一次ActionChains(browser)的话，实际效果会变成每次移动距离分别为1 3 6 10，我还是不知道原因。（这个bug花了我好多时间）</li>
+</ul>
+<p>优点（自卖自夸一波，嘻嘻）：</p>
+<ul>
+<li>代码量少：除去注释，代码不到70行</li>
+<li>简单易懂：无任何复杂的原理或者算法，所用到的知识老师都在小学二年级讲过</li>
+<li>最重要的：定位缺口这一算法完全是自己写的，未借鉴他人（虽然不是什么高深的东西，但这种精神是值得鼓励的，对吧/doge</li>
+</ul>
+<p>完整代码如下：</p>
+<p>关键步骤都写了详细注释，理解起来应该不难，就不完整写思路了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver <span class="keyword">import</span> ActionChains</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="comment">#找到拼图缺口，并返回横坐标，即滑块应滑动的距离</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_distance</span>(<span class="params">image0</span>):</span></span><br><span class="line">    <span class="comment">#匹配拼图直线的长度</span></span><br><span class="line">    length = <span class="number">0</span></span><br><span class="line">    <span class="comment">#滑动终点坐标</span></span><br><span class="line">    xy = (<span class="number">0</span>,<span class="number">0</span>)</span><br><span class="line">    image = Image.open(image0)</span><br><span class="line">    width = image.size[<span class="number">0</span>]</span><br><span class="line">    heigth = image.size[<span class="number">1</span>]</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    由下至上，由左至右的遍历图片的像素点，由拼图特征可得，底边总是长的且颜色为白色的直线，且这条直线以上便是阴影部分，</span></span><br><span class="line"><span class="string">    颜色较暗，所以可以通过这一特征来找到拼图的底边，便可得到的位置，然后返回偏移量。</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> h <span class="keyword">in</span> range(heigth<span class="number">-1</span>,<span class="number">2</span>,<span class="number">-1</span>):</span><br><span class="line">        <span class="keyword">for</span> w <span class="keyword">in</span> range(width):</span><br><span class="line">            img = image.getpixel((w,h))</span><br><span class="line">            img1 = image.getpixel((w,h<span class="number">-1</span>))</span><br><span class="line">            <span class="comment">#白色的RGB值都很大，直线以上偏暗部分RGB值较小，40为自行定义的一个差值，可根据实际情况调节</span></span><br><span class="line">            <span class="keyword">if</span>(img[<span class="number">0</span>]-img1[<span class="number">0</span>]&gt;<span class="number">40</span> <span class="keyword">and</span> img[<span class="number">1</span>]-img1[<span class="number">1</span>]&gt;<span class="number">40</span> <span class="keyword">and</span> img[<span class="number">2</span>]-img1[<span class="number">2</span>]&gt;<span class="number">40</span>):</span><br><span class="line">                <span class="keyword">if</span>(length == <span class="number">0</span>):</span><br><span class="line">                    xy = (w,h)</span><br><span class="line">                length += <span class="number">1</span></span><br><span class="line">            <span class="keyword">elif</span>(length&lt;<span class="number">60</span>):<span class="comment">#测得这条直线长度为65，故在小于等于65这一范围内取一合理限制值即可</span></span><br><span class="line">                length = <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> length &gt; <span class="number">59</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">return</span> int(xy[<span class="number">0</span>]*<span class="number">28</span>/<span class="number">59</span>)<span class="comment">#返回缩放后所需的真实值</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">#将getdistance所得到的距离转换成一个变速运动的偏移量列表，避免拖动滑块时被检测到，返回的列表的每个元素为这一段应滑动的偏移量</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">to_offsetlist</span>(<span class="params">offset</span>):</span></span><br><span class="line">    <span class="comment">#注意，由于信息门户的限制条件并不算严格，所以我只做了一个简单的伪变速，实则为不同的一小段一小段的匀速</span></span><br><span class="line">    offsetlist = []</span><br><span class="line">    a = <span class="number">0</span></span><br><span class="line">    v = <span class="number">0</span></span><br><span class="line">    tmp = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span>(tmp &lt; offset):</span><br><span class="line">        offsetlist.append(v)</span><br><span class="line">        <span class="keyword">if</span> tmp &lt; offset//<span class="number">2</span>:</span><br><span class="line">            a = <span class="number">3</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            a = <span class="number">-2</span></span><br><span class="line">        v += a</span><br><span class="line">        tmp += v</span><br><span class="line">    offsetlist.append(offset-tmp+v)<span class="comment">#补上最后差的那一段距离</span></span><br><span class="line">    <span class="keyword">return</span> offsetlist</span><br><span class="line">   </span><br><span class="line"><span class="comment">#打模拟输入账号密码并登录，获取拼图图片，下载到本地</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_pic</span>(<span class="params">browser</span>):</span></span><br><span class="line">    username = <span class="string">&quot;xxx&quot;</span></span><br><span class="line">    password = <span class="string">&quot;xxx&quot;</span></span><br><span class="line">    <span class="comment">#以下5行分别为：进入目标地址，输入账号密码，点击登录，获取拼图图片</span></span><br><span class="line">    browser.get(<span class="string">&quot;https://idas.uestc.edu.cn/authserver/login&quot;</span>)</span><br><span class="line">    browser.find_element_by_xpath(<span class="string">&#x27;//*[@id=&quot;username&quot;]&#x27;</span>).send_keys(username)</span><br><span class="line">    browser.find_element_by_xpath(<span class="string">&#x27;//*[@id=&quot;password&quot;]&#x27;</span>).send_keys(password)</span><br><span class="line">    browser.find_element_by_xpath(<span class="string">&#x27;//*[@id=&quot;casLoginForm&quot;]/p[4]/button&#x27;</span>).click()</span><br><span class="line">    tmp = browser.find_element_by_id(<span class="string">&#x27;img1&#x27;</span>).get_attribute(<span class="string">&#x27;src&#x27;</span>)</span><br><span class="line">    img_base = tmp.split(<span class="string">&quot;,&quot;</span>)<span class="comment">#去掉头部，分离出要用的base64编码</span></span><br><span class="line">    img = base64.b64decode(img_base[<span class="number">1</span>])<span class="comment">#转为图片</span></span><br><span class="line">    fp = open(<span class="string">&#x27;test.png&#x27;</span>,<span class="string">&#x27;wb&#x27;</span>)</span><br><span class="line">    fp.write(img)</span><br><span class="line">    fp.close()    </span><br><span class="line"></span><br><span class="line"><span class="comment">#模拟拖动滑块</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">slide</span>(<span class="params">browser,offsetlist</span>):</span></span><br><span class="line">    slider = browser.find_element_by_xpath(<span class="string">&#x27;//*[@id=&quot;captcha&quot;]/div/div[2]/div&#x27;</span>)</span><br><span class="line">    action = ActionChains(browser)</span><br><span class="line">    action.click_and_hold(slider).perform()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> offsetlist:</span><br><span class="line">        action.move_by_offset(i, <span class="number">0</span>).perform()</span><br><span class="line">        action = ActionChains(browser)</span><br><span class="line">    action.release(slider).perform()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    browser = webdriver.Firefox(<span class="string">&quot;E:/Mozilla Firefox&quot;</span>)</span><br><span class="line">    get_pic(browser)</span><br><span class="line">    offset = get_distance(<span class="string">&quot;D:/CODE/test.png&quot;</span>)</span><br><span class="line">    offsetlist = to_offsetlist(offset)</span><br><span class="line">    slide(browser,offsetlist)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
       
 
       
@@ -189,7 +200,173 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/09/26/%E7%84%A6%E7%B3%96%E9%A2%98%E7%9B%AE/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/10/12/%E7%84%A6%E7%B3%96#7/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-焦糖#12" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/09/26/%E7%84%A6%E7%B3%96#12/">焦糖CTF题目</a>
+    </h1>
+  
+
+        
+        <a href="/2020/09/26/%E7%84%A6%E7%B3%96#12/" class="archive-article-date">
+  	<time datetime="2020-09-26T09:01:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="12-CTF"><a href="#12-CTF" class="headerlink" title="#12 CTF"></a>#12 CTF</h1><p>寒假期间偶然接触到过ctf，了解一些基础知识，虽然不准备走网安方向，但还是做了一部分简单的ctf招新题。</p>
+<!--Read more-->
+
+<h3 id="1-签到题："><a href="#1-签到题：" class="headerlink" title="1.签到题："></a>1.签到题：</h3><p>提示中已给出</p>
+<h3 id="2-NothingHere"><a href="#2-NothingHere" class="headerlink" title="2.NothingHere:"></a>2.NothingHere:</h3><p>查看源代码即可发现flag</p>
+<h3 id="3-Easysql"><a href="#3-Easysql" class="headerlink" title="3.Easysql:"></a>3.Easysql:</h3><p>很明显，这是一道sql注入的题，构造’1’ order by 2,和’1’ union select 1,2得到字段长度和回显位置，构造’1’union select1,database() 查到数据库名字为easysql，构造’1’union select 1,table_name from information_schema.tables where table_schema=’easysql’ 查出表名为flaghere，最后盲猜flag字段，构造’1’union select 1,flag from flaghere得到flag</p>
+<h3 id="4-GET-amp-POST"><a href="#4-GET-amp-POST" class="headerlink" title="4.GET&amp;POST:"></a>4.GET&amp;POST:</h3><p>isset()函数检查变量有没有被设置，用hackbar同时以get和post方式给a和b随便提交一个值进去即可获得flag</p>
+<h3 id="5-SheIsAlwaysTheBEST"><a href="#5-SheIsAlwaysTheBEST" class="headerlink" title="5.SheIsAlwaysTheBEST:"></a>5.SheIsAlwaysTheBEST:</h3><p>0exxxxxx形式的数值会被当成科学计数法，结果都为0，“==”判定为真，所以只要找两个md5值都为oe开头的即可，因为a要求为纯字母，b要求为数字，最终输入的值为a=QNKCDZO&amp;b=240610708。最后要解决的是变量c，首先变量c是一个对象，其中还包含了key这一变量，并且这个k的值还要满足 key == $flag。显然，flag是一条字符串，而”==”只比较数值，字符串会被当成0来处理，所以我们只要给c这个对象的key设置为0即可，即用post传入c={“key”:0}即可获得flag</p>
+<h3 id="6-IP-amp-Referer"><a href="#6-IP-amp-Referer" class="headerlink" title="6.IP&amp;Referer:"></a>6.IP&amp;Referer:</h3><p>改一下http头即可：</p>
+<p>X-Forwarded-For:1.1.1.1</p>
+<p>Referer:<a target="_blank" rel="noopener" href="http://www.doyouhaveagirlfriend.com/">www.doyouhaveagirlfriend.com</a></p>
+<h3 id="7-EasyFLASK"><a href="#7-EasyFLASK" class="headerlink" title="7.EasyFLASK:"></a>7.EasyFLASK:</h3><p>根据题目可知这是一道flask模板注入的题，根据提示需要用post给name传值，构造name={ {1+1} }提交显示2，由此可知，存在ssti漏洞，构造’’._<em>class_\</em>.__bases__[0].__subclasses__()查找父类的所有子类，通过浏览器搜索发现有warnings.catch_warnings这一子类，得到位置为182，</p>
+<p>构造{ {‘’.__class__.__bases__[0].__subclasses__()[182].__init__.__globals__.__builtins__.eval(“__import__(‘os’).popen(‘dir’).read()”) } }查得放有flag的文件的文件名为flag.txt，所以在前面的基础上改为popen(‘cat flag.txt’)，得到最终的payload，并得到flag.</p>
+<p>{ {‘’.__class__.__bases__[0]._<em>subclasses_\</em>()[182].__init__.__globals__.__builtins__.eval(“__import__(‘os’).popen(‘cat flag.txt’).read()”)} }</p>
+<h3 id="8-EasyUPLOAD"><a href="#8-EasyUPLOAD" class="headerlink" title="8.EasyUPLOAD:"></a>8.EasyUPLOAD:</h3><p>显然，这是一道文件上传的题。上传含一句话木马的php文件，发现有文件类型检测。用burp suite抓包改文件类型为image/jpeg后成功绕过，但发现还有文件内容检测，几次上传尝试后，发现是对&lt;?php这一敏感词有限制，修改一句话木马为&lt;?=eval($_POST[‘cmd’]);后成功绕过检测，上传成功，用蚁剑连上后成功找到flag。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">招新题</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/09/26/%E7%84%A6%E7%B3%96#12/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-焦糖#14" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/09/25/%E7%84%A6%E7%B3%96#14/">焦糖算法题目</a>
+    </h1>
+  
+
+        
+        <a href="/2020/09/25/%E7%84%A6%E7%B3%96#14/" class="archive-article-date">
+  	<time datetime="2020-09-25T09:01:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="14-算法："><a href="#14-算法：" class="headerlink" title="#14 算法："></a>#14 算法：</h1><p>只做了比较简单的第一题，第二题动态规划没怎么了解过，暂时没做，以后再慢慢学吧。</p>
+<!--Read more-->
+
+<h3 id="题一："><a href="#题一：" class="headerlink" title="题一："></a>题一：</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> brige[<span class="number">3</span>][<span class="number">100</span>];<span class="comment">//brige[0][i] == h;brige[1][i] == start;brige[2][i] == end</span></span><br><span class="line">    <span class="keyword">int</span> n,num=<span class="number">0</span>,x[<span class="number">1000</span>] = &#123;<span class="number">0</span>&#125;;<span class="comment">//x用来记录当前坐标已建桥的高度</span></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d&quot;</span>,&amp;brige[<span class="number">0</span>][i],&amp;brige[<span class="number">1</span>][i],&amp;brige[<span class="number">2</span>][i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j&lt;n;j++)</span><br><span class="line">    &#123;</span><br><span class="line">        num += brige[<span class="number">2</span>][j] - brige[<span class="number">1</span>][j]-(brige[<span class="number">0</span>][j] != <span class="number">0</span>)&amp;&amp;brige[<span class="number">1</span>][j] != brige[<span class="number">2</span>][j];<span class="comment">//高度为0或始末位置相同的情况不需要减1</span></span><br><span class="line">        <span class="keyword">if</span>(brige[<span class="number">1</span>][j] == brige[<span class="number">2</span>][j])<span class="comment">//始末位置一致只用一遍材料</span></span><br><span class="line">        &#123;</span><br><span class="line">            num += brige[<span class="number">0</span>][j];</span><br><span class="line">            x[brige[<span class="number">1</span>][j]] = brige[<span class="number">0</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">        <span class="keyword">if</span>(brige[<span class="number">0</span>][j] &gt; x[brige[<span class="number">1</span>][j]])</span><br><span class="line">        &#123;</span><br><span class="line">            num += brige[<span class="number">0</span>][j] - x[brige[<span class="number">1</span>][j]];</span><br><span class="line">            x[brige[<span class="number">1</span>][j]] = brige[<span class="number">0</span>][j];</span><br><span class="line">        &#125;         </span><br><span class="line">        <span class="keyword">if</span>(brige[<span class="number">0</span>][j] &gt; x[brige[<span class="number">2</span>][j]])</span><br><span class="line">        &#123;</span><br><span class="line">            num += brige[<span class="number">0</span>][j] - x[brige[<span class="number">2</span>][j]];</span><br><span class="line">            x[brige[<span class="number">2</span>][j]] = brige[<span class="number">0</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;      </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,num);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">招新题</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/09/25/%E7%84%A6%E7%B3%96#14/">展开全文 >></a>
         </p>
       
 
