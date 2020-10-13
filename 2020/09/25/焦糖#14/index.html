@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="https://what1f.github.io">
   <title>焦糖算法题目 | Closer.</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="#14 算法：只做了比较简单的第一题，第二题动态规划没怎么了解过，暂时没做，以后再慢慢学吧。   题一：123456789101112131415161718192021222324252627282930313233343536#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;int main()&amp;#123;    int brige[3][100">
+  <meta name="description" content="#14 算法：只做了比较简单的第一题，第二题动态规划没怎么了解过，暂时没做，以后再慢慢学吧。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="焦糖算法题目">
 <meta property="og:url" content="https://what1f.github.io/2020/09/25/%E7%84%A6%E7%B3%96#14/index.html">
 <meta property="og:site_name" content="Closer.">
-<meta property="og:description" content="#14 算法：只做了比较简单的第一题，第二题动态规划没怎么了解过，暂时没做，以后再慢慢学吧。   题一：123456789101112131415161718192021222324252627282930313233343536#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;int main()&amp;#123;    int brige[3][100">
+<meta property="og:description" content="#14 算法：只做了比较简单的第一题，第二题动态规划没怎么了解过，暂时没做，以后再慢慢学吧。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-09-25T09:01:13.000Z">
-<meta property="article:modified_time" content="2020-10-13T07:03:26.324Z">
+<meta property="article:modified_time" content="2020-10-13T07:16:56.336Z">
 <meta property="article:author" content="Closer">
 <meta property="article:tag" content="招新题">
 <meta name="twitter:card" content="summary">
@@ -159,7 +159,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="14-算法："><a href="#14-算法：" class="headerlink" title="#14 算法："></a>#14 算法：</h1><p>只做了比较简单的第一题，第二题动态规划没怎么了解过，暂时没做，以后再慢慢学吧。</p>
-<!--Read more-->
+<a id="more"></a>
 
 <h3 id="题一："><a href="#题一：" class="headerlink" title="题一："></a>题一：</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> brige[<span class="number">3</span>][<span class="number">100</span>];<span class="comment">//brige[0][i] == h;brige[1][i] == start;brige[2][i] == end</span></span><br><span class="line">    <span class="keyword">int</span> n,num=<span class="number">0</span>,x[<span class="number">1000</span>] = &#123;<span class="number">0</span>&#125;;<span class="comment">//x用来记录当前坐标已建桥的高度</span></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d&quot;</span>,&amp;brige[<span class="number">0</span>][i],&amp;brige[<span class="number">1</span>][i],&amp;brige[<span class="number">2</span>][i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j&lt;n;j++)</span><br><span class="line">    &#123;</span><br><span class="line">        num += brige[<span class="number">2</span>][j] - brige[<span class="number">1</span>][j]-(brige[<span class="number">0</span>][j] != <span class="number">0</span>)&amp;&amp;brige[<span class="number">1</span>][j] != brige[<span class="number">2</span>][j];<span class="comment">//高度为0或始末位置相同的情况不需要减1</span></span><br><span class="line">        <span class="keyword">if</span>(brige[<span class="number">1</span>][j] == brige[<span class="number">2</span>][j])<span class="comment">//始末位置一致只用一遍材料</span></span><br><span class="line">        &#123;</span><br><span class="line">            num += brige[<span class="number">0</span>][j];</span><br><span class="line">            x[brige[<span class="number">1</span>][j]] = brige[<span class="number">0</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">        <span class="keyword">if</span>(brige[<span class="number">0</span>][j] &gt; x[brige[<span class="number">1</span>][j]])</span><br><span class="line">        &#123;</span><br><span class="line">            num += brige[<span class="number">0</span>][j] - x[brige[<span class="number">1</span>][j]];</span><br><span class="line">            x[brige[<span class="number">1</span>][j]] = brige[<span class="number">0</span>][j];</span><br><span class="line">        &#125;         </span><br><span class="line">        <span class="keyword">if</span>(brige[<span class="number">0</span>][j] &gt; x[brige[<span class="number">2</span>][j]])</span><br><span class="line">        &#123;</span><br><span class="line">            num += brige[<span class="number">0</span>][j] - x[brige[<span class="number">2</span>][j]];</span><br><span class="line">            x[brige[<span class="number">2</span>][j]] = brige[<span class="number">0</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;      </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>,num);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -272,11 +272,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2020/09/26/%E7%84%A6%E7%B3%96%E9%A2%98%E7%9B%AE/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/09/26/%E7%84%A6%E7%B3%96#12/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          焦糖题目
+          焦糖CTF题目
         
       </div>
     </a>
